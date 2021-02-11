@@ -35,15 +35,13 @@ class Item extends Component {
         disabled={item.disabled}
         key={`${getByPath(item, props.valueField)}${getByPath(item, props.labelField)}`}
         tabIndex="-1"
-        className={`${LIB_NAME}-item ${
-          methods.isSelected(item) ? `${LIB_NAME}-item-selected` : ''
-        } ${state.cursor === itemIndex ? `${LIB_NAME}-item-active` : ''} ${
+        className={`${LIB_NAME}-item ${state.cursor === itemIndex ? `${LIB_NAME}-item-active` : ''} ${
           item.disabled ? `${LIB_NAME}-item-disabled` : ''
         }`}
         onClick={item.disabled ? undefined : () => methods.addItem(item)}
         onKeyPress={item.disabled ? undefined : () => methods.addItem(item)}
         color={props.color}>
-        {getByPath(item, props.labelField)} {item.disabled && <ins>{props.disabledLabel}</ins>}
+        <ThumbnailCompoenent src={item._source.background_image}/>{getByPath(item, props.labelField)}{item._source.author_name?` - ${item._source.author_name}`:""}{item.disabled && <ins>{props.disabledLabel}</ins>}
       </ItemComponent>
     );
   }
@@ -104,5 +102,12 @@ const ItemComponent = styled.span`
     `
       : ''}
 `;
+
+const ThumbnailCompoenent = styled.img `
+width: 40px;
+height: 40px;
+border-radius: 4px;
+margin-right: 10px;
+`
 
 export default Item;

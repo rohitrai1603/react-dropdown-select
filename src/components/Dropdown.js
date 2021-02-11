@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { LIB_NAME } from '../constants';
 import NoData from '../components/NoData';
 import Item from '../components/Item';
-
+import Filter from './Filter';
 import { valueExistInSelected, hexToRGBA, isomorphicWindow } from '../util';
 
 const dropdownPosition = (props, methods) => {
@@ -50,6 +50,13 @@ const Dropdown = ({ props, state, methods }) => (
             {props.createNewLabel.replace('{search}', `"${state.search}"`)}
           </AddNew>
         )}
+        {state.searchResults.length > 0 && props.showFilter ?
+              <Filter
+                props={props}
+                state={state}
+                methods={methods}
+              />:null
+            }
         {state.searchResults.length === 0 ? (
           <NoData
             className={`${LIB_NAME}-no-data`}

@@ -44,6 +44,10 @@ export class Select extends Component {
     searchable: PropTypes.bool,
     separator: PropTypes.bool,
     dropdownHandle: PropTypes.bool,
+    showFilter:PropTypes.bool,
+    filterData:PropTypes.array,
+    onFilterSelect: PropTypes.func,
+    selectedFilter: PropTypes.object,
     searchBy: PropTypes.string,
     sortBy: PropTypes.string,
     closeOnScroll: PropTypes.bool,
@@ -75,6 +79,8 @@ export class Select extends Component {
       search: '',
       selectBounds: {},
       cursor: null,
+      filterData:props.filterData,
+      selectedFilter:null,
       searchResults: props.options,
     };
 
@@ -96,7 +102,8 @@ export class Select extends Component {
       activeCursorItem: this.activeCursorItem,
       createNew: this.createNew,
       sortBy: this.sortBy,
-      safeString: this.safeString
+      safeString: this.safeString,
+      selectedFilterFun:this.selectedFilterFun
     };
 
     this.select = React.createRef();
@@ -129,6 +136,14 @@ export class Select extends Component {
         }
       );
       this.updateSelectBounds();
+    }
+    if (
+      prevProps.selectedFilter !== this.state.selectedFilter
+    ) {
+      
+          this.props.onFilterSelect(this.state.selectedFilter);
+        
+      // this.updateSelectBounds();
     }
 
     if (prevProps.options !== this.props.options) {
@@ -322,7 +337,8 @@ export class Select extends Component {
   clearAll = () => {
     this.props.onClearAll();
     this.setState({
-      values: []
+      values: [],
+      selectedFilter:null
     });
   };
 
@@ -385,7 +401,13 @@ export class Select extends Component {
     this.setState({
       activeCursorItem
     });
-
+    selectedFilterFun =(selectedFilter)=>{
+    console.log(selectedFilter)
+    this.setState({selectedFilter:{
+      ...selectedFilter,
+      selected:true
+    }})
+  }
   handleKeyDown = (event) => {
     const args = {
       event,
@@ -566,6 +588,7 @@ Select.defaultProps = {
   separator: false,
   keepOpen: undefined,
   noDataLabel: 'No data',
+  filterData:[],
   createNewLabel: 'add {search}',
   disabledLabel: 'disabled',
   dropdownGap: 5,
@@ -587,6 +610,7 @@ Select.defaultProps = {
   name: null,
   required: false,
   pattern: undefined,
+  onFilterSelect: () => undefined,
   onChange: () => undefined,
   onDropdownOpen: () => undefined,
   onDropdownClose: () => undefined,
@@ -597,7 +621,8 @@ Select.defaultProps = {
   searchFn: () => undefined,
   handleKeyDownFn: () => undefined,
   additionalProps: null,
-  backspaceDelete: true
+  backspaceDelete: true,
+  selectedFilter:null
 };
 
 const ReactDropdownSelect = styled.div`
