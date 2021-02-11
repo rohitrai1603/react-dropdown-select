@@ -90,6 +90,10 @@ declare module 'react-dropdown-select' {
     clearable?: boolean;
     searchable?: boolean;
     dropdownHandle?: boolean;
+    showFilter?:boolean;
+    filterData?:array;
+    onFilterSelect?: () => void;
+    selectedFilter?:object;
     separator?: boolean;
     keepOpen?: boolean;
     noDataLabel?: string;
